@@ -1,0 +1,22 @@
+a,Claudio Mochila,claudio@gmail.com,1234567891,Engenharia Informatica,2014,normal
+a,Diogo Inside,diogo@gmail.com,1234567892,Engenharia Informatica,2015,atleta
+a,Nuno Massudo,nuno@gmail.com,1234567893,Design e Multimedia,2014,normal
+a,Bruno Chaves,bruno@gmail.com,1234567894,Design e Multimedia,2016,normal
+a,Joaquim Pirolito,joaquim@gmail.com,1234567895,Design e Multimedia,2015,erasmus
+a,Vando Rapido,vando@gmail.com,1234567896,Design e Multimedia,2015,atleta
+a,Dulce Pontes,dulce@gmail.com,1234567897,Engenharia Informatica,2016,normal
+a,Filomena Raspadinha,filomena@gmail.com,Engenharia Informatica,2016,dirigente
+a,Fabio Ferreira,fabio@gmail.com,2015229929,Engenharia Informatica,2015,normal
+a,Luis Azinheiro,luis@gmail.com,2014202020,Engenharia Informatica,2014,normal
+a,Jorge Amado,jorge@gmail.com,1111111111,Engenharia Informatica,2015,trabEstudante
+a,Marta Almada,marta@gmail.com,2222222222,Engenharia Informatica,2015,atleta
+d,Georgina Dehoje,georgina@gmail.com,111,Catedratico,Computadores
+d,Intel Isete,intel@gmail.com,222,Auxiliar,Processadores
+d,Humberto Stream, humberto@gmail.com,Catedratico,Redes
+d,Clarice Cheiinha,clarice@gmail.com,Associado,Processadores
+d,Teresa Guilherme,teresa@gmail.com,Auxiliar,Audio e Video
+d,Malmequer Doprado,malmequer@gmail.com,Catedratico,Computadores
+n,Filipe Vento,filipe@gmail.com,Tecnico Superior,Secretaria
+n,Josefino Chulé,josefino@gmail.com,Assistente Operacional, Financeiro
+n,Clementina Encarnação,clementina@gmail.com,Assistente Tecnico,Apoio Tecnico
+n,Vanessa Bonita,vanessa@gmail.com,Especialista de Informatica,Secretaria
