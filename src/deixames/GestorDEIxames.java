@@ -5,14 +5,27 @@
  */
 package deixames;
 
+import java.io.*;
+import static java.lang.System.exit;
+import java.util.ArrayList;
+
 /**
  *
  * @author fabio
  */
 public class GestorDEIxames {
     
+    
+    private ArrayList<Pessoa> ListPessoas;
     //metodos 
-    public void criarExame(){
+    
+    //leitura de um ficheiro de textp que contem toda a informaçao sobre Pessoas
+    public void loadPessoas(String nome_fich) throws FileNotFoundException{
+        FileReader frd = new FileReader(new File(nome_fich));
+        ListPessoas = new ArrayList<Pessoa>();
+        
+        
         
     }
+    
 }
