@@ -10,19 +10,19 @@ package deixames;
  * @author Proprietário
  */
 public class Docente extends Funcionario {
-    private String areaInvetig;
+    private String areaInvestig;
 
-    public Docente(String areaInvetig, int numMec, String nome, String email) {
+    public Docente( String nome, String email, int numMec,String areaInvetig) {
         super(numMec, nome, email);
-        this.areaInvetig = areaInvetig;
+        this.areaInvestig = areaInvetig;
     }
 
     @Override
     public void setCategoria(String categoria) {
         this.categoria=categoria; 
     }
-    
-    /*cucu*/
-    
-    
+    @Override
+    public String toString(){
+        return nome+"   "+email+"   "+numMec+"  "+areaInvestig+"   "+categoria;
+    }
 }

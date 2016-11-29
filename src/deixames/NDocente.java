@@ -12,7 +12,7 @@ package deixames;
 public class NDocente extends Funcionario{
     private String cargo;
 
-    public NDocente(String cargo, int numMec, String nome, String email) {
+    public NDocente(String nome, String email, int numMec, String cargo) {
         super(numMec, nome, email);
         this.cargo = cargo;
     }
@@ -20,5 +20,9 @@ public class NDocente extends Funcionario{
     @Override
     public void setCategoria(String categoria) {
         this.categoria=categoria; 
+    }
+    @Override
+    public String toString(){
+        return nome+"   "+email+"   "+numMec+"  "+cargo+"   "+categoria;
     }
 }

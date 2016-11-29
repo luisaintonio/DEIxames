@@ -11,15 +11,19 @@ package deixames;
  */
 public class Aluno extends Pessoa{
     private int numero;
-    private Curso curso;
+    private String curso;
     private int anoMatric;
     private String regime;
 
-    public Aluno(int numero, Curso curso, int anoMatric, String regime, String nome, String email) {
+    public Aluno(String nome, String email,int numero, String curso, int anoMatric, String regime) {
         super(nome, email);
         this.numero = numero;
         this.curso = curso;
         this.anoMatric = anoMatric;
         this.regime = regime;
+    }
+    @Override
+    public String toString(){
+        return nome+"   "+email+"   "+numero+"  "+curso+"   "+anoMatric+"   "+regime;
     }
 }
