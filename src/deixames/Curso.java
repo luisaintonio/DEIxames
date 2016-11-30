@@ -5,13 +5,14 @@
  */
 package deixames;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author fabio
  */
-public class Curso {
+public class Curso implements Serializable {
     private String nome;
     private int duracaoAnos;
     private String grau;
@@ -24,5 +25,11 @@ public class Curso {
         listDiscp = new ArrayList<Disciplina>();
     }
     
+    public void addDiscp(Disciplina d){
+        listDiscp.add(d);
+    }
     
+    public String toString(){
+        return nome+"   "+duracaoAnos+"     "+grau;
+    }
 }

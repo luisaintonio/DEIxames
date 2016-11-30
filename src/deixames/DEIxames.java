@@ -9,6 +9,7 @@ public class DEIxames {
         // onde vai ficar o menu ou eventualmente a interface grafica
         GestorDEIxames g=new GestorDEIxames();
         g.loadPessoas("pessoas.txt");
+        g.curso();
     }
     
 }
