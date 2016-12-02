@@ -22,6 +22,23 @@ public class Aluno extends Pessoa{
         this.anoMatric = anoMatric;
         this.regime = regime;
     }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public String getCurso() {
+        return curso;
+    }
+
+    public int getAnoMatric() {
+        return anoMatric;
+    }
+
+    public String getRegime() {
+        return regime;
+    }
+    
     @Override
     public String toString(){
         return nome+"   "+email+"   "+numero+"  "+curso+"   "+anoMatric+"   "+regime;

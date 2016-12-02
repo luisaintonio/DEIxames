@@ -19,6 +19,10 @@ public class Docente extends Funcionario implements Serializable{
         this.areaInvestig = areaInvetig;
     }
 
+    public String getAreaInvestig() {
+        return areaInvestig;
+    }
+
     @Override
     public void setCategoria(String categoria) {
         this.categoria=categoria; 

@@ -10,6 +10,8 @@ public class DEIxames {
         GestorDEIxames g=new GestorDEIxames();
         g.loadPessoas("ficheiros\\pessoas.txt");
         g.save_curso();
+        g.savePessoas("ficheiros\\pessoas.txt");
+       
         //g.loadCursos("ficheiros\\cursos.dat");
     }
     

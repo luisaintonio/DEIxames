@@ -17,6 +17,11 @@ public class NDocente extends Funcionario{
         this.cargo = cargo;
     }
 
+    public String getCargo() {
+        return cargo;
+    }
+    
+
     @Override
     public void setCategoria(String categoria) {
         this.categoria=categoria; 

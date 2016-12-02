@@ -8,6 +8,7 @@ package deixames;
 import java.io.*;
 import static java.lang.System.exit;
 import java.util.ArrayList;
+import java.util.StringJoiner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -67,9 +68,8 @@ public class GestorDEIxames {
                 }
       
             }
-//            for(Pessoa p: listPessoas){
-//                System.out.println(p);
-//            }
+//          for(Pessoa p: listPessoas) System.out.println(p);
+//            
    
             fR.close();
         }catch (FileNotFoundException e){
@@ -79,14 +79,59 @@ public class GestorDEIxames {
             System.out.println("Erro o ler do ficheiro "+nome_fich);
         }  
     }
+    public void savePessoas(String nome_fich){
+        //guardar num ficheiro de texto linha a linha cada elemento do array de pessoas PROCURAR FUNÇÃO JOIN
+        //StringJoiner sj = new StringJoiner(",");/*atravez de sj.add(elemt) adicionamos elementos a uma string separados por vilgula*/
+        String[] novaLinha;
+        for (Pessoa p: listPessoas){
+            if (p instanceof Aluno){
+                StringJoiner sj = new StringJoiner(",");/*atravez de sj.add(elemt) adicionamos elementos a uma string separados por vilgula*/
+                Aluno a = (Aluno)p;
+                /*perguntar ao stor qual é o acesso a uma var protected*/
+                String numero = Integer.toString(a.getNumero());
+                String anoM = Integer.toString(a.getAnoMatric());
+                
+                novaLinha = new String[]{"a",a.nome,a.email,numero,a.getCurso(),anoM,a.getRegime()};
+                for(String e:novaLinha) sj.add(e);
+                
+                System.out.println(sj);
+            }else if(p instanceof Docente){
+                StringJoiner sj = new StringJoiner(",");
+                Docente d = (Docente)p;
+
+                String numMec= Integer.toString(d.numMec);
+                
+                novaLinha = new String[]{"d",d.nome,d.email,numMec,d.getAreaInvestig(),d.categoria};
+                for(String e:novaLinha) sj.add(e);
+                
+                System.out.println(sj);
+            }else if (p instanceof NDocente){
+                StringJoiner sj = new StringJoiner(",");
+                NDocente nd = (NDocente)p;
+
+                String numMec= Integer.toString(nd.numMec);
+                
+                novaLinha = new String[]{"n",nd.nome,nd.email,numMec,nd.getCargo(),nd.categoria};
+                for(String e:novaLinha) sj.add(e);
+                
+                System.out.println(sj);
+            }else
+                System.out.println("Erro ao guardar dados em "+nome_fich);
+                
+        
+        }
+            
+        //String[] novaLinha = new String[]{"a","nome","email","..."};
+       
+        //for(String e:novaLinha) sj.add(e);   
+    }
 //    public void loadCursos(String nome_fich) throws IOException, ClassNotFoundException{
 //        try{
 //            ObjectInputStream iS = new ObjectInputStream(new FileInputStream(nome_fich));
 //            listCursos = new ArrayList<Curso>();
 //            listCursos = (ArrayList<Curso>)iS.readObject();
 //            
-//            for(Curso c: listCursos)
-//                System.out.println(c);
+//            for(Curso c: listCursos) System.out.println(c);
 //       
 //            
 //        }catch (FileNotFoundException e){
@@ -101,10 +146,10 @@ public class GestorDEIxames {
 //        }
 //    }
     
-    public void criaExame(){
-        
-        
-    }
+//    public void criaExame(){
+//        //metodo para criar exame e adicionalo a lista de exames
+//        
+//    }
 
 
 
