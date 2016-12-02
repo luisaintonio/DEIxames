@@ -6,11 +6,15 @@
 package deixames;
 
 import java.io.*;
+import static java.lang.Math.abs;
+import static java.lang.Math.log10;
 import static java.lang.System.exit;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.StringJoiner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 /**
  *
@@ -79,52 +83,8 @@ public class GestorDEIxames {
             System.out.println("Erro o ler do ficheiro "+nome_fich);
         }  
     }
-    public void savePessoas(String nome_fich){
-        //guardar num ficheiro de texto linha a linha cada elemento do array de pessoas PROCURAR FUNÇÃO JOIN
-        //StringJoiner sj = new StringJoiner(",");/*atravez de sj.add(elemt) adicionamos elementos a uma string separados por vilgula*/
-        String[] novaLinha;
-        for (Pessoa p: listPessoas){
-            if (p instanceof Aluno){
-                StringJoiner sj = new StringJoiner(",");/*atravez de sj.add(elemt) adicionamos elementos a uma string separados por vilgula*/
-                Aluno a = (Aluno)p;
-                /*perguntar ao stor qual é o acesso a uma var protected*/
-                String numero = Integer.toString(a.getNumero());
-                String anoM = Integer.toString(a.getAnoMatric());
-                
-                novaLinha = new String[]{"a",a.nome,a.email,numero,a.getCurso(),anoM,a.getRegime()};
-                for(String e:novaLinha) sj.add(e);
-                
-                System.out.println(sj);
-            }else if(p instanceof Docente){
-                StringJoiner sj = new StringJoiner(",");
-                Docente d = (Docente)p;
 
-                String numMec= Integer.toString(d.numMec);
-                
-                novaLinha = new String[]{"d",d.nome,d.email,numMec,d.getAreaInvestig(),d.categoria};
-                for(String e:novaLinha) sj.add(e);
-                
-                System.out.println(sj);
-            }else if (p instanceof NDocente){
-                StringJoiner sj = new StringJoiner(",");
-                NDocente nd = (NDocente)p;
-
-                String numMec= Integer.toString(nd.numMec);
-                
-                novaLinha = new String[]{"n",nd.nome,nd.email,numMec,nd.getCargo(),nd.categoria};
-                for(String e:novaLinha) sj.add(e);
-                
-                System.out.println(sj);
-            }else
-                System.out.println("Erro ao guardar dados em "+nome_fich);
-                
-        
-        }
-            
-        //String[] novaLinha = new String[]{"a","nome","email","..."};
-       
-        //for(String e:novaLinha) sj.add(e);   
-    }
+    
 //    public void loadCursos(String nome_fich) throws IOException, ClassNotFoundException{
 //        try{
 //            ObjectInputStream iS = new ObjectInputStream(new FileInputStream(nome_fich));
@@ -145,16 +105,171 @@ public class GestorDEIxames {
 //            e.printStackTrace();
 //        }
 //    }
+    public Pessoa novoAluno(int tipo){
+        //criar novo Pessoa e associar a ListPessoas
+        //tipo 1 para aluno, 2 para docente, 3 para nao docente
+        Pessoa novo;
+        switch(tipo){
+            case 1:
+                //novo Aluno
+                System.out.println("NOVO ALUNO:\n");
+                
+                Scanner sc = new Scanner(System.in);
+                System.out.print("Nome: ");
+                String nome = sc.next();
+                System.out.print("Email: ");
+                String email = sc.next();
+                System.out.print("Numero de Estudante (10 digitos):");
+
+                int check = 0;
+                do{
+                    check=0;
+                    int num = sc.nextInt();
+                    if(!verificaNum(num,10)){
+                        check = 1;
+                        System.out.println("O numero introduzido não é valido!");
+                        break;
+                    }else if(verificaNum(num,10) && procuraPessoa_num(num) != null){
+                        check = 1;
+                        System.out.println("O numero introduzido ja existe!");
+                        break;
+                    }    
+                }while(check!=0);
+                System.out.print("Ano de matricula: ");
+                do{
+                    check = 0;
+                    int anoMt = sc.nextInt();
+                    if(!verificaNum(anoMt,4) && anoMt > 2016){
+                        check = 1;
+                        System.out.println("Ano introduzido invalido, lembre-se que estamos em 2016.");     
+                    }
+                }while(check != 0);
+                System.out.println("Curso: ");
+                
+                
+            
+                //novo = new Aluno();
+                break;
+            case 2:
+                //novo Docente
+                break;
+            case 3:
+                //NDocente
+                break;
+            default:
+                System.out.println("Erro na função novoAluno(int tipo) : Pessoa");
+                return null;
+        }
+        return novo;
+    }
+    public int numeroDigitos(int n){
+        return (int) (log10(abs(n))+1);
+    }
+    public boolean verificaNum(int num, int digitos){
+        //verifica se o num tem um certo numero de digitos e se é negativo
+        if ((num<0) || (numeroDigitos(num) !=digitos)){
+            return false;
+        }else
+            return true;
+        
+    }
     
-//    public void criaExame(){
-//        //metodo para criar exame e adicionalo a lista de exames
-//        
-//    }
+    public Pessoa procuraPessoa_num(int numero){
+        //procura pelo numero na lista de Pessoas e devolve a pessoa de encontrada, senao devolve null
+        for(Pessoa p: listPessoas){
+            if (p instanceof Aluno){
+                Aluno a = (Aluno)p;
+                if (numero == a.getNumero())
+                    return a;
+            }else if (p instanceof Docente){
+                Docente d = (Docente)p;
+                if (numero == d.numMec)
+                    return d;
+            }else if (p instanceof NDocente){
+                NDocente nd = (NDocente)p;
+                if(numero == nd.numMec)
+                    return nd;
+            }else
+                return null;
+        }
+    }
+    
+    public void criaExame(){
+        //metodo para criar exame e adicionalo a lista de exames
+        
+        /*NOTA::
+        escolher um curso, dentro curso a disciplina,docenResp = docente da disciplina
+        atribuimos docentes disponiveis
+        sem e alunos e com notas a zero
+        tipo = exame por realizar
+        depois, quando inscrever aluno apenas aparecem os exames que ainda naão tem notas lançadas
+        isto é depois de notas lançadas ja não é possivel increverAluno porque o exames ja esta realizado... assim não temos em conta datas o que é mais facil
+        
+        aparecem todas as disciplinas do curso do aluno e escolhendo a disciplina aperecem os exames disponiveis
+        ao inscrever aluno colocamos o aluno no hashmap com a nota = 0
+        */
+        
+    }
 
+    public void savePessoas(String nome_fich) throws IOException{
+        //guardar num ficheiro de texto linha a linha cada elemento do array de pessoas PROCURAR FUNÇÃO JOIN
+        //StringJoiner sj = new StringJoiner(",");/*atravez de sj.add(elemt) adicionamos elementos a uma string separados por vilgula*/
+        try{
+            BufferedWriter fW = new BufferedWriter(new FileWriter(nome_fich));
+            
+            String[] novaLinha;
+            for (Pessoa p: listPessoas){
+                if (p instanceof Aluno){
+                    StringJoiner sj = new StringJoiner(",");/*atravez de sj.add(elemt) adicionamos elementos a uma string separados por vilgula*/
+                    Aluno a = (Aluno)p;
+                    /*perguntar ao stor qual é o acesso a uma var protected*/
+                    String numero = Integer.toString(a.getNumero());
+                    String anoM = Integer.toString(a.getAnoMatric());
 
+                    novaLinha = new String[]{"a",a.nome,a.email,numero,a.getCurso(),anoM,a.getRegime()};
+                    for(String e:novaLinha) sj.add(e);
+                    //porque o StringJOIner nao é uma String
+                    String j = sj.toString();
+                    fW.write(j, 0, j.length());
+                    fW.newLine();
+                    
+                }else if(p instanceof Docente){
+                    StringJoiner sj = new StringJoiner(",");
+                    Docente d = (Docente)p;
 
-//criar apenas algumas disciplinas para atribuir aos cursos e guardar num ficheiro
-public void save_curso(){
+                    String numMec= Integer.toString(d.numMec);
+
+                    novaLinha = new String[]{"d",d.nome,d.email,numMec,d.getAreaInvestig(),d.categoria};
+                    for(String e:novaLinha) sj.add(e);
+
+                    String j = sj.toString();
+                    fW.write(j, 0, j.length());
+                    fW.newLine();
+                }else if (p instanceof NDocente){
+                    StringJoiner sj = new StringJoiner(",");
+                    NDocente nd = (NDocente)p;
+
+                    String numMec= Integer.toString(nd.numMec);
+
+                    novaLinha = new String[]{"n",nd.nome,nd.email,numMec,nd.getCargo(),nd.categoria};
+                    for(String e:novaLinha) sj.add(e);
+
+                    String j = sj.toString();
+                    fW.write(j, 0, j.length());
+                    fW.newLine();
+                }
+            }
+            fW.close(); 
+        }catch (FileNotFoundException e){
+            System.out.println("Erro ao abrir o ficheiro "+nome_fich);
+            e.printStackTrace();
+        }catch (IOException e){
+            System.out.println("Erro ao escrever do ficheiro "+nome_fich);
+            e.printStackTrace();
+        } 
+ }
+    //criar apenas algumas disciplinas para atribuir aos cursos e guardar num ficheiro
+    public void save_curso(){
     Docente d1 = (Docente) listPessoas.get(15);
     Docente d2 = (Docente) listPessoas.get(12);
     Docente d3 = (Docente) listPessoas.get(13);
