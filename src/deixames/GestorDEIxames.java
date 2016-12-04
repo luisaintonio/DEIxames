@@ -10,6 +10,7 @@ import static java.lang.Math.abs;
 import static java.lang.Math.log10;
 import static java.lang.System.exit;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.StringJoiner;
 import java.util.logging.Level;
@@ -108,6 +109,10 @@ public class GestorDEIxames {
     public Pessoa novoAluno(int tipo){
         //criar novo Pessoa e associar a ListPessoas
         //tipo 1 para aluno, 2 para docente, 3 para nao docente
+        
+        /*criar um limite de tentativas que quando excedido termina a função e devolve null
+        apresentar tambme varios tipos de regime e opção outroe que permite introduzir outra opção*/
+        
         Pessoa novo;
         switch(tipo){
             case 1:
@@ -116,62 +121,82 @@ public class GestorDEIxames {
                 
                 Scanner sc = new Scanner(System.in);
                 System.out.print("Nome: ");
-                String nome = sc.next();
+                String nome = sc.nextLine();
                 System.out.print("Email: ");
-                String email = sc.next();
+                String email = sc.nextLine();
                 System.out.print("Numero de Estudante (10 digitos):");
 
-                int check = 0;
+                int check = 0, num =0;
                 do{
                     check=0;
-                    int num = sc.nextInt();
+                    num = sc.nextInt();
                     if(!verificaNum(num,10)){
                         check = 1;
-                        System.out.println("O numero introduzido não é valido!");
-                        break;
+                        System.out.println("O numero introduzido não é valido!"); 
                     }else if(verificaNum(num,10) && procuraPessoa_num(num) != null){
                         check = 1;
                         System.out.println("O numero introduzido ja existe!");
-                        break;
                     }    
                 }while(check!=0);
                 System.out.print("Ano de matricula: ");
+                int anoMt = 0;
                 do{
                     check = 0;
-                    int anoMt = sc.nextInt();
-                    if(!verificaNum(anoMt,4) && anoMt > 2016){
+                    anoMt = sc.nextInt();
+                    if(!verificaNum(anoMt,4) || anoMt > 2016){
                         check = 1;
                         System.out.println("Ano introduzido invalido, lembre-se que estamos em 2016.");     
                     }
                 }while(check != 0);
-                System.out.println("Curso: ");
+                System.out.println("Cursos: ");
+                listCursos.forEach((c) -> {System.out.println("     "+c.getNome());});
+                System.out.print("\nDigite o nome do curso que pertende: ");
+                String curso = new String();
+                do{
+                    check=0;
+                    curso = sc.nextLine();
+                    if (procuraCurso(curso) == null){
+                        check = 1;
+                        System.out.println("Opção invalidada, Tente de novo.");
+                    }
+                }while(check !=0);
                 
-                
-            
-                //novo = new Aluno();
+                System.out.print("Regime: ");
+                String regime = sc.nextLine();
+
+                novo = new Aluno(nome,email,num,curso,anoMt,regime);
+                System.out.println(novo);
                 break;
-            case 2:
-                //novo Docente
-                break;
-            case 3:
-                //NDocente
-                break;
+//            case 2:
+//                //novo Docente
+//                break;
+//            case 3:
+//                //NDocente
+//                break;
             default:
                 System.out.println("Erro na função novoAluno(int tipo) : Pessoa");
                 return null;
         }
         return novo;
     }
+    public Curso procuraCurso(String nC){
+        for(Curso c: listCursos){
+            if (Objects.equals(nC, c.getNome()))
+                return c;
+        }
+        return null;
+    }
+    
     public int numeroDigitos(int n){
         return (int) (log10(abs(n))+1);
     }
+    
     public boolean verificaNum(int num, int digitos){
         //verifica se o num tem um certo numero de digitos e se é negativo
         if ((num<0) || (numeroDigitos(num) !=digitos)){
             return false;
         }else
             return true;
-        
     }
     
     public Pessoa procuraPessoa_num(int numero){
@@ -189,27 +214,26 @@ public class GestorDEIxames {
                 NDocente nd = (NDocente)p;
                 if(numero == nd.numMec)
                     return nd;
-            }else
-                return null;
-        }
+                }
+        }return null;
     }
     
-    public void criaExame(){
-        //metodo para criar exame e adicionalo a lista de exames
-        
-        /*NOTA::
-        escolher um curso, dentro curso a disciplina,docenResp = docente da disciplina
-        atribuimos docentes disponiveis
-        sem e alunos e com notas a zero
-        tipo = exame por realizar
-        depois, quando inscrever aluno apenas aparecem os exames que ainda naão tem notas lançadas
-        isto é depois de notas lançadas ja não é possivel increverAluno porque o exames ja esta realizado... assim não temos em conta datas o que é mais facil
-        
-        aparecem todas as disciplinas do curso do aluno e escolhendo a disciplina aperecem os exames disponiveis
-        ao inscrever aluno colocamos o aluno no hashmap com a nota = 0
-        */
-        
-    }
+//    public void criaExame(){
+//        //metodo para criar exame e adicionalo a lista de exames
+//        
+//        /*NOTA::
+//        escolher um curso, dentro curso a disciplina,docenResp = docente da disciplina
+//        atribuimos docentes disponiveis
+//        sem e alunos e com notas a zero
+//        tipo = exame por realizar
+//        depois, quando inscrever aluno apenas aparecem os exames que ainda naão tem notas lançadas
+//        isto é depois de notas lançadas ja não é possivel increverAluno porque o exames ja esta realizado... assim não temos em conta datas o que é mais facil
+//        
+//        aparecem todas as disciplinas do curso do aluno e escolhendo a disciplina aperecem os exames disponiveis
+//        ao inscrever aluno colocamos o aluno no hashmap com a nota = 0
+//        */
+//        
+//    }
 
     public void savePessoas(String nome_fich) throws IOException{
         //guardar num ficheiro de texto linha a linha cada elemento do array de pessoas PROCURAR FUNÇÃO JOIN
