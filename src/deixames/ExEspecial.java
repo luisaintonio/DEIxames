@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class ExEspecial extends Exame {
 
-    public ExEspecial(Disciplina discp, Date data, int duracao, String Sala, Docente docResp, String tipo) {
+    public ExEspecial(Disciplina discp, Date data, int duracao, String Sala, Docente docResp) {
         super(discp, data, duracao, Sala, docResp);
     }
 

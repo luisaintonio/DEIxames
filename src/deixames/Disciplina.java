@@ -28,6 +28,10 @@ public class Disciplina implements Serializable{
     public String getNome() {
         return nome;
     }
+
+    public Docente getDocResp() {
+        return docResp;
+    }
     
     public void printAlunos(){
         for(int nAluno: alunosInscr){

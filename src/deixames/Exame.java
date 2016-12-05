@@ -17,7 +17,7 @@ public abstract class Exame {
     protected int duracao;
     protected String Sala;
     protected Docente docResp;
-    //protected String tipo;
+    protected String estado = "PENDENTE";//estado de realização d exame, POR DEFINIÇÃO ESTA PENDENTE
     protected ArrayList<Docente> vigilantes;
     protected ArrayList<NDocente> funcionarios;
     protected HashMap<Aluno, Integer> alunosInscr;
@@ -28,14 +28,27 @@ public abstract class Exame {
         this.duracao = duracao;
         this.Sala = Sala;
         this.docResp = docResp;
-        //this.tipo = tipo;
+        
         vigilantes = new ArrayList<Docente>();
         funcionarios = new ArrayList<NDocente>();
         alunosInscr = new HashMap<Aluno, Integer>();
     }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
     
-    //public abstract void setTipo(String tipo);
-    public abstract void adicionaAluno(Aluno novo);
+    
+    
+    //metodos
+    //associaVigilante(Docente);
+    //associaFuncionario(NDocente);
+    
+    public abstract void adicionaAluno(Aluno novo);//add ao hashMap e poe a sua nota a zero.
     
     
 

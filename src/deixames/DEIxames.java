@@ -9,11 +9,16 @@ public class DEIxames {
         // onde vai ficar o menu ou eventualmente a interface grafica
         GestorDEIxames g=new GestorDEIxames();
         g.loadPessoas("ficheiros\\pessoas.txt");
-        g.curso();
+        
+        //g.curso();//cria e escreve ficheiro de objetos
+        g.loadCursos("ficheiros\\cursos.dat"); //le ficheiros de objectos
+        
         //g.novoPessoa(1);
-        g.savePessoas("ficheiros\\pessoas.txt");
+        //g.criaExame();
+        //g.savePessoas("ficheiros\\pessoas.txt");
+        //g.saveCursos("ficehiros\\cursos.dat");
        
-        //g.loadCursos("ficheiros\\cursos.dat");
+       
     }
     
 }

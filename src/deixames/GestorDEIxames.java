@@ -9,7 +9,10 @@ import java.io.*;
 import static java.lang.Math.abs;
 import static java.lang.Math.log10;
 import static java.lang.System.exit;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.StringJoiner;
@@ -23,9 +26,10 @@ import java.util.logging.Logger;
  */
 public class GestorDEIxames {
     
-    
+    String[] salas = {"C5.1","C5.2","C5.3","G4.1","G4.2","G4.3","G4.4","E6.1","E6.2","E6.3"};
     private ArrayList<Pessoa> listPessoas;
     private ArrayList<Curso> listCursos;
+    private ArrayList<Exame> listExames;
     //metodos 
     
     //leitura de um ficheiro de texto para um array, com toda a informaçao sobre Pessoas
@@ -86,26 +90,24 @@ public class GestorDEIxames {
     }
 
     
-//    public void loadCursos(String nome_fich) throws IOException, ClassNotFoundException{
-//        try{
-//            ObjectInputStream iS = new ObjectInputStream(new FileInputStream(nome_fich));
-//            listCursos = new ArrayList<Curso>();
-//            listCursos = (ArrayList<Curso>)iS.readObject();
-//            
-//            for(Curso c: listCursos) System.out.println(c);
-//       
-//            
-//        }catch (FileNotFoundException e){
-//            System.out.println("Erro ao abrir o ficheiro "+nome_fich);
-//            e.printStackTrace();
-//        }catch (IOException e){
-//            System.out.println("Erro ao ler do ficheiro "+nome_fich);
-//            e.printStackTrace();
-//        }catch (ClassNotFoundException e){
-//            System.out.println("Classe não encontrada em "+nome_fich);
-//            e.printStackTrace();
-//        }
-//    }
+    public void loadCursos(String nome_fich) throws IOException, ClassNotFoundException{
+        try{
+            ObjectInputStream iS = new ObjectInputStream(new FileInputStream(nome_fich));
+            listCursos = (ArrayList<Curso>)iS.readObject();
+            for(Curso c: listCursos) System.out.println(c);
+            
+        }catch (FileNotFoundException e){
+            System.out.println("Erro ao abrir o ficheiro "+nome_fich);
+            e.printStackTrace();
+        }catch (IOException e){
+            System.out.println("Erro ao ler do ficheiro "+nome_fich);
+            e.printStackTrace();
+        }catch (ClassNotFoundException e){
+            System.out.println("Classe não encontrada em "+nome_fich);
+            e.printStackTrace();
+        }
+    }
+    
     public Pessoa novoPessoa(int tipo){
         //criar novo Pessoa e associar a ListPessoas
         //tipo 1 para aluno, 2 para docente, 3 para nao docente
@@ -122,6 +124,7 @@ public class GestorDEIxames {
                 Scanner sc = new Scanner(System.in);
                 System.out.print("Nome: ");
                 String nome = sc.nextLine();
+                
                 System.out.print("Email: ");
                 String email = sc.nextLine();
                 System.out.print("Numero de Estudante (10 digitos):");
@@ -237,7 +240,7 @@ public class GestorDEIxames {
         */
         System.out.println("NOVO EXAME\n\nEscolha o tipo de exame que pretende crair:");
         System.out.print("     1) Exame Época Normal\n     2) Exame Época de Recurso\n     3) Exames Época Especial\n Opção: ");
-        Exame novo;
+        Exame novo = null;
         Scanner sc = new Scanner(System.in);
         int check=0;
         int op = 0;
@@ -249,28 +252,112 @@ public class GestorDEIxames {
                 System.out.println("Opção invalida. Tente de novo.");
             }
         }while(check!=0);
+        
         //codigo que pede informações sobre o exame
+        System.out.println("\nCursos: ");
+        listCursos.forEach((c) -> {System.out.println("     "+c.getNome());});
+        System.out.print("\nDigite o nome do curso que pertende: ");
+        String nomeCurso = new String();
+        Curso curso;
+        do{
+            check=0;
+            nomeCurso = sc.nextLine();
+            if ((curso = procuraCurso(nomeCurso)) == null){
+                check = 1;
+                System.out.println("Opção invalida. Tente de novo.");
+            }
+        }while(check !=0);
+        
+        System.out.println("\nCurso: "+curso.getNome());
+        //imprime o nome de todas as disciplinas
+        (curso.getListDiscp()).forEach((discp) -> {System.out.println("    "+discp.getNome());});
+        System.out.print("\nEscolha a disciplina para a qual pretende criar um novo exame: ");
+        Disciplina d;
+        String nomeDiscp = new String();
+        do{
+            check = 0;
+            nomeDiscp = sc.nextLine();
+            if((d=curso.procuraDisp(nomeDiscp)) == null){
+                check=1;
+                System.out.println("Opção invalida. Tente de novo.");
+            }
+        }while(check!=0);
+        //pedir data e hora do exame
+        System.out.print("\nData e duracao (dd/mm/aaaa hh:mm): ");
+        String strData = new String();
+        Date data;
+        do{
+            check=0;
+            strData = sc.nextLine();
+            if((data=leData(strData)) == null){
+                check = 1;
+                System.out.println("Erro ao ler a data. Tente de novo.");
+            }
+        }while(check!=0);  
+
+        System.out.print("\nDuração da prova (minutos): ");
+        int duracao = sc.nextInt();
+        
+        System.out.println("Salas:");
+        //apresentamos apenas as salas disponiveis tendo em conta a hora de realização e a 
+        for(String sala: salas){
+            if(!verificaSala(sala))
+                System.out.println("    - "+sala);
+        }
+        
+        Docente dResp = d.getDocResp();
         
         switch(op){
             case 1:
                 //exame normal
-                
-                //apenas criar tipo de exame new Normal(c dhub,fudsicbe,c guibdsjc);
+                novo = new ExNormal(d,data,duracao,"sala",dResp);
                 break;
-            case 2:
-                //epoca recurso
-                break;
-            case 3:
-                //epoca especial
-                break;
+//            case 2:
+//                //epoca recurso
+//                break;
+//            case 3:
+//                //epoca especial
+//                break;
       
         }
+        listExames.add(novo);
     }
-        
+    public Date leData(String d){
+        //converte uma string com a data num determinado formato num objeto date
+        try {
+            Date data = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(d);
+            return data;
+        } catch (ParseException ex) {
+            Logger.getLogger(GestorDEIxames.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    public boolean verificaSala(String s){
+        for(Exame e: listExames){
+            if(Objects.equals(e.Sala, s)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public void saveCursos(String nome_fich) throws IOException{
+        try {
+            FileOutputStream os = new FileOutputStream("ficheiros\\cursos.dat");
+            try (ObjectOutputStream oos = new ObjectOutputStream(os)) {
+                oos.writeObject(listCursos);
+            }
+        }catch (FileNotFoundException ex) {
+            System.out.println("Ficheiro não encontrado");
+        }catch (IOException ex) {
+            System.out.println("Erro ao escrever no ficheiro");
+        }
+    }
+    
     
 
     public void savePessoas(String nome_fich) throws IOException{
-        //guardar num ficheiro de texto linha a linha cada elemento do array de pessoas FUNÇÃO:  STRINGJOINER
+        //guardar num ficheiro de texto linha a linha cada elemento do array de pessoas FUNÇÃO: STRINGJOINER
         try{
             BufferedWriter fW = new BufferedWriter(new FileWriter(nome_fich));
             
@@ -285,7 +372,7 @@ public class GestorDEIxames {
 
                     novaLinha = new String[]{"a",a.nome,a.email,numero,a.getCurso(),anoM,a.getRegime()};
                     for(String e:novaLinha) sj.add(e);
-                    //porque o StringJOIner nao é uma String
+                    //porque o StringJoiner nao é uma String
                     String j = sj.toString();
                     fW.write(j, 0, j.length());
                     fW.newLine();
@@ -324,68 +411,67 @@ public class GestorDEIxames {
             System.out.println("Erro ao escrever do ficheiro "+nome_fich);
             e.printStackTrace();
         } 
- }
-    //criar apenas algumas disciplinas para atribuir aos cursos e guardar num ficheiro
-    public void curso(){
-    Docente d1 = (Docente) listPessoas.get(15);
-    Docente d2 = (Docente) listPessoas.get(12);
-    Docente d3 = (Docente) listPessoas.get(13);
-    Docente d4 = (Docente) listPessoas.get(14);
-    Docente d5 = (Docente) listPessoas.get(16);
-    Docente d6 = (Docente) listPessoas.get(17);
-    Docente d7 = (Docente) listPessoas.get(18);
-    Docente d8 = (Docente) listPessoas.get(19);
-    Docente[] docts = new Docente[3];
-    Disciplina i1 = new Disciplina("Multimedia",d1,docts);
-    Disciplina i2 = new Disciplina("Programacao Orientada a Objetps",d2,docts);
-    Disciplina i3 = new Disciplina("Sistemas Operativos",d3,docts);
-    Disciplina i4 = new Disciplina("Engenharia de Software",d4,docts);
-    
-    Disciplina i5 = new Disciplina("Multimedia",d1,docts);
-    Disciplina i6 = new Disciplina("Programacao Orientada a Objetps",d2,docts);
-    Disciplina i7 = new Disciplina("Sistemas Operativos",d3,docts);
-    Disciplina i8 = new Disciplina("Engenharia de Software",d4,docts);
-
-    Curso enginf = new Curso("Engenharia Informatica",3,"Licenciatura");
-    Curso desmul = new Curso("Design e Multimedia",3,"Licenciatura");
-
-
-    enginf.addDiscp(i1);
-    enginf.addDiscp(i2);
-    enginf.addDiscp(i3);
-    enginf.addDiscp(i4);
-    
-    desmul.addDiscp(i5);
-    desmul.addDiscp(i6);
-    desmul.addDiscp(i7);
-    desmul.addDiscp(i8);
-    
-    listCursos = new ArrayList<Curso>();
-    listCursos.add(enginf);
-    listCursos.add(desmul);
-    
-    //adicionar alunos a partir do array
-    for(Pessoa p: listPessoas){
-        if (p instanceof Aluno){
-            String nC = ((Aluno) p).getCurso();
-            Curso c = procuraCurso(nC);
-            c.addAluno((Aluno) p);
-        }
     }
-    i1.printAlunos();
-    //imorimir cursos
-    listCursos.forEach((c) -> {System.out.println(c);});
-
-    try {
-        FileOutputStream os = new FileOutputStream("ficheiros\\cursos.dat");
-        try (ObjectOutputStream oos = new ObjectOutputStream(os)) {
-            oos.writeObject(listCursos);
-        }
-    }catch (FileNotFoundException ex) {
-        System.out.println("Ficheiro não encontrado");
-    }catch (IOException ex) {
-        System.out.println("Erro ao escrever no ficheiro");
-    }
-}
+//    //criar apenas algumas disciplinas para atribuir aos cursos e guardar num ficheiro
+//    public void curso(){
+//    Docente d1 = (Docente) listPessoas.get(15);
+//    Docente d2 = (Docente) listPessoas.get(12);
+//    Docente d3 = (Docente) listPessoas.get(13);
+//    Docente d4 = (Docente) listPessoas.get(14);
+//    Docente d5 = (Docente) listPessoas.get(16);
+//    Docente d6 = (Docente) listPessoas.get(17);
+//    Docente d7 = (Docente) listPessoas.get(18);
+//    Docente d8 = (Docente) listPessoas.get(19);
+//    Docente[] docts = new Docente[3];
+//    Disciplina i1 = new Disciplina("Multimedia",d1,docts);
+//    Disciplina i2 = new Disciplina("Programacao Orientada a Objetps",d2,docts);
+//    Disciplina i3 = new Disciplina("Sistemas Operativos",d3,docts);
+//    Disciplina i4 = new Disciplina("Engenharia de Software",d4,docts);
+//    
+//    Disciplina i5 = new Disciplina("Multimedia",d1,docts);
+//    Disciplina i6 = new Disciplina("Programacao Orientada a Objetos",d2,docts);
+//    Disciplina i7 = new Disciplina("Sistemas Operativos",d3,docts);
+//    Disciplina i8 = new Disciplina("Engenharia de Software",d4,docts);
+//
+//    Curso enginf = new Curso("Engenharia Informatica",3,"Licenciatura");
+//    Curso desmul = new Curso("Design e Multimedia",3,"Licenciatura");
+//
+//
+//    enginf.addDiscp(i1);
+//    enginf.addDiscp(i2);
+//    enginf.addDiscp(i3);
+//    enginf.addDiscp(i4);
+//    
+//    desmul.addDiscp(i5);
+//    desmul.addDiscp(i6);
+//    desmul.addDiscp(i7);
+//    desmul.addDiscp(i8);
+//    
+//    listCursos = new ArrayList<Curso>();
+//    listCursos.add(enginf);
+//    listCursos.add(desmul);
+//    
+//    //adicionar alunos a partir do array
+//    for(Pessoa p: listPessoas){
+//        if (p instanceof Aluno){
+//            String nC = ((Aluno) p).getCurso();
+//            Curso c = procuraCurso(nC);
+//            c.addAluno((Aluno) p);
+//        }
+//    }
+////    i1.printAlunos();
+////    //imorimir cursos
+////    listCursos.forEach((c) -> {System.out.println(c);});
+//    try {
+//        FileOutputStream os = new FileOutputStream("ficheiros\\cursos.dat");
+//        try (ObjectOutputStream oos = new ObjectOutputStream(os)) {
+//            oos.writeObject(listCursos);
+//        }
+//    }catch (FileNotFoundException ex) {
+//        System.out.println("Ficheiro não encontrado");
+//    }catch (IOException ex) {
+//        System.out.println("Erro ao escrever no ficheiro");
+//    }
+//}
 
 }

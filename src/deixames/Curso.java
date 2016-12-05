@@ -29,6 +29,11 @@ public class Curso implements Serializable {
     public String getNome() {
         return nome;
     }
+
+    public ArrayList<Disciplina> getListDiscp() {
+        return listDiscp;
+    }
+    
     
     public void addDiscp(Disciplina d){
         listDiscp.add(d);

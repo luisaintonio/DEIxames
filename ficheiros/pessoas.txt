@@ -22,3 +22,4 @@ n,Filipe Vento,filipe@gmail.com,777,Tecnico Superior,Secretaria
 n,Josefino Chule,josefino@gmail.com,888,Assistente Operacional, Financeiro
 n,Clementina Encarnacao,clementina@gmail.com,999,Assistente Tecnico,Apoio Tecnico
 n,Vanessa Bonita,vanessa@gmail.com,101,Especialista de Informatica,Secretaria
+a,fabio ferreira,fabio@fabio,1478523695,Engenharia Informatica,2000,normal

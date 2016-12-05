@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class ExRecurso extends Exame{
 
-    public ExRecurso(Disciplina discp, Date data, int duracao, String Sala, Docente docResp, String tipo) {
+    public ExRecurso(Disciplina discp, Date data, int duracao, String Sala, Docente docResp) {
         super(discp, data, duracao, Sala, docResp);
     }
 
