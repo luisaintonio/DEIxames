@@ -106,7 +106,7 @@ public class GestorDEIxames {
 //            e.printStackTrace();
 //        }
 //    }
-    public Pessoa novoAluno(int tipo){
+    public Pessoa novoPessoa(int tipo){
         //criar novo Pessoa e associar a ListPessoas
         //tipo 1 para aluno, 2 para docente, 3 para nao docente
         
@@ -151,11 +151,12 @@ public class GestorDEIxames {
                 System.out.println("Cursos: ");
                 listCursos.forEach((c) -> {System.out.println("     "+c.getNome());});
                 System.out.print("\nDigite o nome do curso que pertende: ");
-                String curso = new String();
+                String nomeCurso = new String();
+                Curso curso;
                 do{
                     check=0;
-                    curso = sc.nextLine();
-                    if (procuraCurso(curso) == null){
+                    nomeCurso = sc.nextLine();
+                    if ((curso = procuraCurso(nomeCurso)) == null){
                         check = 1;
                         System.out.println("Opção invalidada, Tente de novo.");
                     }
@@ -164,8 +165,8 @@ public class GestorDEIxames {
                 System.out.print("Regime: ");
                 String regime = sc.nextLine();
 
-                novo = new Aluno(nome,email,num,curso,anoMt,regime);
-                System.out.println(novo);
+                novo = new Aluno(nome,email,num,nomeCurso,anoMt,regime);
+                curso.addAluno((Aluno) novo);
                 break;
 //            case 2:
 //                //novo Docente
@@ -177,9 +178,11 @@ public class GestorDEIxames {
                 System.out.println("Erro na função novoAluno(int tipo) : Pessoa");
                 return null;
         }
+        listPessoas.add((novo));
         return novo;
     }
     public Curso procuraCurso(String nC){
+        //procura um curso atraves no nome do curso passado por parametro
         for(Curso c: listCursos){
             if (Objects.equals(nC, c.getNome()))
                 return c;
@@ -218,26 +221,56 @@ public class GestorDEIxames {
         }return null;
     }
     
-//    public void criaExame(){
-//        //metodo para criar exame e adicionalo a lista de exames
-//        
-//        /*NOTA::
-//        escolher um curso, dentro curso a disciplina,docenResp = docente da disciplina
-//        atribuimos docentes disponiveis
-//        sem e alunos e com notas a zero
-//        tipo = exame por realizar
-//        depois, quando inscrever aluno apenas aparecem os exames que ainda naão tem notas lançadas
-//        isto é depois de notas lançadas ja não é possivel increverAluno porque o exames ja esta realizado... assim não temos em conta datas o que é mais facil
-//        
-//        aparecem todas as disciplinas do curso do aluno e escolhendo a disciplina aperecem os exames disponiveis
-//        ao inscrever aluno colocamos o aluno no hashmap com a nota = 0
-//        */
-//        
-//    }
+    public void criaExame(){
+        //metodo para criar exame e adicionalo a lista de exames
+        
+        /*NOTA::
+        escolher um curso, dentro curso a disciplina,docenResp = docente da disciplina
+        atribuimos docentes disponiveis
+        sem e alunos e com notas a zero
+        tipo = exame por realizar
+        depois, quando inscrever aluno apenas aparecem os exames que ainda naão tem notas lançadas
+        isto é depois de notas lançadas ja não é possivel increverAluno porque o exames ja esta realizado... assim não temos em conta datas o que é mais facil
+        
+        aparecem todas as disciplinas do curso do aluno e escolhendo a disciplina aperecem os exames disponiveis
+        ao inscrever aluno colocamos o aluno no hashmap com a nota = 0
+        */
+        System.out.println("NOVO EXAME\n\nEscolha o tipo de exame que pretende crair:");
+        System.out.print("     1) Exame Época Normal\n     2) Exame Época de Recurso\n     3) Exames Época Especial\n Opção: ");
+        Exame novo;
+        Scanner sc = new Scanner(System.in);
+        int check=0;
+        int op = 0;
+        do{
+            check=0;
+            op = sc.nextInt();
+            if (op!=1 && op!=2 && op!=3){
+                check = 1;
+                System.out.println("Opção invalida. Tente de novo.");
+            }
+        }while(check!=0);
+        //codigo que pede informações sobre o exame
+        
+        switch(op){
+            case 1:
+                //exame normal
+                
+                //apenas criar tipo de exame new Normal(c dhub,fudsicbe,c guibdsjc);
+                break;
+            case 2:
+                //epoca recurso
+                break;
+            case 3:
+                //epoca especial
+                break;
+      
+        }
+    }
+        
+    
 
     public void savePessoas(String nome_fich) throws IOException{
-        //guardar num ficheiro de texto linha a linha cada elemento do array de pessoas PROCURAR FUNÇÃO JOIN
-        //StringJoiner sj = new StringJoiner(",");/*atravez de sj.add(elemt) adicionamos elementos a uma string separados por vilgula*/
+        //guardar num ficheiro de texto linha a linha cada elemento do array de pessoas FUNÇÃO:  STRINGJOINER
         try{
             BufferedWriter fW = new BufferedWriter(new FileWriter(nome_fich));
             
@@ -293,7 +326,7 @@ public class GestorDEIxames {
         } 
  }
     //criar apenas algumas disciplinas para atribuir aos cursos e guardar num ficheiro
-    public void save_curso(){
+    public void curso(){
     Docente d1 = (Docente) listPessoas.get(15);
     Docente d2 = (Docente) listPessoas.get(12);
     Docente d3 = (Docente) listPessoas.get(13);
@@ -331,6 +364,15 @@ public class GestorDEIxames {
     listCursos.add(enginf);
     listCursos.add(desmul);
     
+    //adicionar alunos a partir do array
+    for(Pessoa p: listPessoas){
+        if (p instanceof Aluno){
+            String nC = ((Aluno) p).getCurso();
+            Curso c = procuraCurso(nC);
+            c.addAluno((Aluno) p);
+        }
+    }
+    i1.printAlunos();
     //imorimir cursos
     listCursos.forEach((c) -> {System.out.println(c);});
 

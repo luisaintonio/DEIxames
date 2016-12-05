@@ -17,24 +17,24 @@ public abstract class Exame {
     protected int duracao;
     protected String Sala;
     protected Docente docResp;
-    protected String tipo;
+    //protected String tipo;
     protected ArrayList<Docente> vigilantes;
     protected ArrayList<NDocente> funcionarios;
     protected HashMap<Aluno, Integer> alunosInscr;
 
-    public Exame(Disciplina discp, Date data, int duracao, String Sala, Docente docResp, String tipo) {
+    public Exame(Disciplina discp, Date data, int duracao, String Sala, Docente docResp) {
         this.discp = discp;
         this.data = data;
         this.duracao = duracao;
         this.Sala = Sala;
         this.docResp = docResp;
-        this.tipo = tipo;
+        //this.tipo = tipo;
         vigilantes = new ArrayList<Docente>();
         funcionarios = new ArrayList<NDocente>();
         alunosInscr = new HashMap<Aluno, Integer>();
     }
     
-    public abstract void setTipo(String tipo);
+    //public abstract void setTipo(String tipo);
     public abstract void adicionaAluno(Aluno novo);
     
     

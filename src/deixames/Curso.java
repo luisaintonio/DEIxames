@@ -7,6 +7,7 @@ package deixames;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  *
@@ -32,8 +33,21 @@ public class Curso implements Serializable {
     public void addDiscp(Disciplina d){
         listDiscp.add(d);
     }
+    public Disciplina procuraDisp(String nomeD){
+        for (Disciplina d: listDiscp){
+            if (Objects.equals(d.getNome(), nomeD))
+                return d;
+        }
+        return null;
+    }
+    
+    public void addAluno(Aluno a){
+        for(Disciplina d: listDiscp){
+            d.addAluno(a);
+        }
+    }
     
     public String toString(){
-        return nome+"   "+duracaoAnos+"     "+grau;
+        return nome+"   "+duracaoAnos+" anos     "+grau;
     }
 }

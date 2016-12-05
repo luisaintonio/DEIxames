@@ -9,8 +9,8 @@ public class DEIxames {
         // onde vai ficar o menu ou eventualmente a interface grafica
         GestorDEIxames g=new GestorDEIxames();
         g.loadPessoas("ficheiros\\pessoas.txt");
-        g.save_curso();
-        g.novoAluno(1);
+        g.curso();
+        //g.novoPessoa(1);
         g.savePessoas("ficheiros\\pessoas.txt");
        
         //g.loadCursos("ficheiros\\cursos.dat");

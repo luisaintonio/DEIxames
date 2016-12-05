@@ -24,5 +24,18 @@ public class Disciplina implements Serializable{
         this.docts = docts;
         alunosInscr = new ArrayList <Integer>();
     }
+
+    public String getNome() {
+        return nome;
+    }
+    
+    public void printAlunos(){
+        for(int nAluno: alunosInscr){
+            System.out.println(nAluno);
+        }
+    }
+    public void addAluno(Aluno a){
+        alunosInscr.add(a.getNumero());
+    }
     
 }
