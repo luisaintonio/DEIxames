@@ -12,6 +12,7 @@ import static java.lang.System.exit;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Scanner;
@@ -301,7 +302,7 @@ public class GestorDEIxames {
         System.out.println("Salas:");
         //apresentamos apenas as salas disponiveis tendo em conta a hora de realização e a 
         for(String sala: salas){
-            if(!verificaSala(sala))
+            if(!verificaSala(sala, data, duracao))
                 System.out.println("    - "+sala);
         }
         
@@ -332,14 +333,38 @@ public class GestorDEIxames {
             return null;
         }
     }
-    public boolean verificaSala(String s){
-        for(Exame e: listExames){
-            if(Objects.equals(e.Sala, s)){
-                return true;
-            }
+    public boolean verificaSala(String s,Date iniD, int dur){
+        Calendar cal = Calendar.getInstance();
+        
+        //FIM DO NOVO EXAME
+        cal.setTime(iniD);
+        cal.add(Calendar.MINUTE, dur);
+        Date fimD = cal.getTime();
+        
+        for(Exame ex: listExames){
+            if ((ex.data.getYear() == iniD.getYear()) && (ex.data.getMonth() == iniD.getMonth()) && (ex.data.getDate() == iniD.getDate())){
+                 if(Objects.equals(ex.Sala, s)){
+                    //FIM DO EXAME NO MESMO DIA E MESMA SALA
+                    cal.setTime(ex.data);
+                    cal.add(Calendar.MINUTE, ex.duracao);
+                    Date fimEx = cal.getTime();
+                    
+                    if (overlapTime(iniD, fimD, ex.data, fimEx)){
+                        return true; //sala ocupada
+                    }
+                }
+            }  
         }
         return false;
     }
+      public boolean overlapTime(Date ini1, Date fim1, Date ini2, Date fim2){
+          //comparar se 2 intervalos de tempo se intercetam
+          //date1.compareTo(date2) < 0 date1 antes date2, senão depois
+          if((ini1.compareTo(fim2) < 0) && (fim1.compareTo(ini2) > 0)){
+              return true;
+          }else
+              return false;
+      } 
     
     public void saveCursos(String nome_fich) throws IOException{
         try {
