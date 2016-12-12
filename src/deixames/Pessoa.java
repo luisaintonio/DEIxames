@@ -5,11 +5,13 @@
  */
 package deixames;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Proprietário
  */
-public class Pessoa {
+public class Pessoa implements Serializable{
     protected String nome;
     protected String email;
     

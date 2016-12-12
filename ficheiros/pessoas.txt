@@ -8,8 +8,8 @@ a,Dulce Pontes,dulce@gmail.com,1234567897,Engenharia Informatica,2016,normal
 a,Filomena Raspadinha,filomena@gmail.com,1234657898,Engenharia Informatica,2016,dirigente
 a,Fabio Ferreira,fabio@gmail.com,2015229929,Engenharia Informatica,2015,normal
 a,Luis Azinheiro,luis@gmail.com,2014202020,Engenharia Informatica,2014,normal
-a,Jorge Amado,jorge@gmail.com,111111,Engenharia Informatica,2015,trabEstudante
-a,Marta Almada,marta@gmail.com,222222,Engenharia Informatica,2015,atleta
+a,Jorge Amado,jorge@gmail.com,1111111111,Engenharia Informatica,2015,trabEstudante
+a,Marta Almada,marta@gmail.com,1111111112,Engenharia Informatica,2015,atleta
 d,Georgina Dehoje,georgina@gmail.com,111,Catedratico,Computadores
 d,Intel Isete,intel@gmail.com,222,Auxiliar,Processadores
 d,Humberto Stream, humberto@gmail.com,333,Catedratico,Redes
@@ -22,3 +22,4 @@ n,Filipe Vento,filipe@gmail.com,777,Tecnico Superior,Secretaria
 n,Josefino Chule,josefino@gmail.com,888,Assistente Operacional, Financeiro
 n,Clementina Encarnacao,clementina@gmail.com,999,Assistente Tecnico,Apoio Tecnico
 n,Vanessa Bonita,vanessa@gmail.com,101,Especialista de Informatica,Secretaria
+a,fabio ferreira,fabio@fabio,1478523695,Engenharia Informatica,2000,normal
