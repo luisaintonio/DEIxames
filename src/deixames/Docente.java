@@ -5,16 +5,22 @@
  */
 package deixames;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Proprietário
  */
-public class Docente extends Funcionario {
+public class Docente extends Funcionario implements Serializable{
     private String areaInvestig;
 
     public Docente( String nome, String email, int numMec,String areaInvetig) {
         super(numMec, nome, email);
         this.areaInvestig = areaInvetig;
+    }
+
+    public String getAreaInvestig() {
+        return areaInvestig;
     }
 
     @Override

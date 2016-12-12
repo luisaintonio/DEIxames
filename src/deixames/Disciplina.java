@@ -5,13 +5,14 @@
  */
 package deixames;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author fabio
  */
-public class Disciplina {
+public class Disciplina implements Serializable{
     private String nome;
     private Docente docResp;
     private Docente [] docts;

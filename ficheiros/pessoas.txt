@@ -16,6 +16,8 @@ d,Humberto Stream, humberto@gmail.com,333,Catedratico,Redes
 d,Clarice Cheiinha,clarice@gmail.com,444,Associado,Processadores
 d,Teresa Guilherme,teresa@gmail.com,555,Auxiliar,Audio e Video
 d,Malmequer Doprado,malmequer@gmail.com,666,Catedratico,Computadores
+d,Carla Penacoa,carla@gmail.com,102,Auxiliar,Arte e Design
+d,Flavia Televisao,flavia@gmail.com,103,Catedratico,Design
 n,Filipe Vento,filipe@gmail.com,777,Tecnico Superior,Secretaria
 n,Josefino Chule,josefino@gmail.com,888,Assistente Operacional, Financeiro
 n,Clementina Encarnacao,clementina@gmail.com,999,Assistente Tecnico,Apoio Tecnico
