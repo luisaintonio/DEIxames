@@ -21,6 +21,9 @@ public class ExEspecial extends Exame {
     public void adicionaAluno(Aluno novo) {
         
     }
-    
+    @Override
+    public String toString(){
+        return "Exame Época Especial de "+discp.getNome()+". A realizar a "+data.getDate()+"/"+data.getMonth()+"/"+data.getYear()+" às "+data.getHours()+":"+data.getMinutes()+" na sala "+Sala;
+    }
 }
 

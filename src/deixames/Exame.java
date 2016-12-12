@@ -5,13 +5,14 @@
  */
 package deixames;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  *
  * @author fabio
  */
-public abstract class Exame {
+public abstract class Exame implements Serializable{
     protected Disciplina discp;
     protected Date data;
     protected int duracao;
@@ -33,19 +34,27 @@ public abstract class Exame {
         funcionarios = new ArrayList<NDocente>();
         alunosInscr = new HashMap<Aluno, Integer>();
     }
+    //metodos
+//
+//    public int setEstado(String estado) {
+//        if (Objects.equals(estado,"REALIZADO")){
+//            this.estado = estado;
+//            return 1;
+//        }else
+//            return 0;
+//    }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setEstado(){
+        this.estado = "REALIZADO";
     }
 
     public String getEstado() {
         return estado;
     }
     
-    
-    
-    //metodos
-    //associaVigilante(Docente);
+    public void associaVigilante(Docente novo){
+        vigilantes.add(novo);
+    }
     //associaFuncionario(NDocente);
     
     public abstract void adicionaAluno(Aluno novo);//add ao hashMap e poe a sua nota a zero.

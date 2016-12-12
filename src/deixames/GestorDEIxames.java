@@ -95,8 +95,25 @@ public class GestorDEIxames {
         try{
             ObjectInputStream iS = new ObjectInputStream(new FileInputStream(nome_fich));
             listCursos = (ArrayList<Curso>)iS.readObject();
-            for(Curso c: listCursos) System.out.println(c);
+//            for(Curso c: listCursos) System.out.println(c);
             
+        }catch (FileNotFoundException e){
+            System.out.println("Erro ao abrir o ficheiro "+nome_fich);
+            e.printStackTrace();
+        }catch (IOException e){
+            System.out.println("Erro ao ler do ficheiro "+nome_fich);
+            e.printStackTrace();
+        }catch (ClassNotFoundException e){
+            System.out.println("Classe não encontrada em "+nome_fich);
+            e.printStackTrace();
+        }
+    }
+    public void loadExames(String nome_fich) throws IOException, ClassNotFoundException{
+        try{
+            ObjectInputStream iS = new ObjectInputStream(new FileInputStream(nome_fich));
+            listExames = (ArrayList<Exame>)iS.readObject();
+//            for (Exame d:listExames)
+//                System.out.println(d);
         }catch (FileNotFoundException e){
             System.out.println("Erro ao abrir o ficheiro "+nome_fich);
             e.printStackTrace();
@@ -182,7 +199,7 @@ public class GestorDEIxames {
                 System.out.println("Erro na função novoAluno(int tipo) : Pessoa");
                 return null;
         }
-        listPessoas.add((novo));
+        listPessoas.add(novo);
         return novo;
     }
     public Curso procuraCurso(String nC){
@@ -227,18 +244,6 @@ public class GestorDEIxames {
     
     public void criaExame(){
         //metodo para criar exame e adicionalo a lista de exames
-        
-        /*NOTA::
-        escolher um curso, dentro curso a disciplina,docenResp = docente da disciplina
-        atribuimos docentes disponiveis
-        sem e alunos e com notas a zero
-        tipo = exame por realizar
-        depois, quando inscrever aluno apenas aparecem os exames que ainda naão tem notas lançadas
-        isto é depois de notas lançadas ja não é possivel increverAluno porque o exames ja esta realizado... assim não temos em conta datas o que é mais facil
-        
-        aparecem todas as disciplinas do curso do aluno e escolhendo a disciplina aperecem os exames disponiveis
-        ao inscrever aluno colocamos o aluno no hashmap com a nota = 0
-        */
         System.out.println("NOVO EXAME\n\nEscolha o tipo de exame que pretende crair:");
         System.out.print("     1) Exame Época Normal\n     2) Exame Época de Recurso\n     3) Exames Época Especial\n Opção: ");
         Exame novo = null;
@@ -257,10 +262,11 @@ public class GestorDEIxames {
         //codigo que pede informações sobre o exame
         System.out.println("\nCursos: ");
         listCursos.forEach((c) -> {System.out.println("     "+c.getNome());});
-        System.out.print("\nDigite o nome do curso que pertende: ");
         String nomeCurso = new String();
         Curso curso;
+        sc.nextLine(); /*limpar buffer do scanner*/
         do{
+            System.out.print("\nDigite o nome do curso que pertende: ");
             check=0;
             nomeCurso = sc.nextLine();
             if ((curso = procuraCurso(nomeCurso)) == null){
@@ -270,12 +276,13 @@ public class GestorDEIxames {
         }while(check !=0);
         
         System.out.println("\nCurso: "+curso.getNome());
+        
         //imprime o nome de todas as disciplinas
         (curso.getListDiscp()).forEach((discp) -> {System.out.println("    "+discp.getNome());});
-        System.out.print("\nEscolha a disciplina para a qual pretende criar um novo exame: ");
         Disciplina d;
         String nomeDiscp = new String();
         do{
+            System.out.print("\nEscolha a disciplina para a qual pretende criar um novo exame: ");
             check = 0;
             nomeDiscp = sc.nextLine();
             if((d=curso.procuraDisp(nomeDiscp)) == null){
@@ -283,16 +290,17 @@ public class GestorDEIxames {
                 System.out.println("Opção invalida. Tente de novo.");
             }
         }while(check!=0);
+        
         //pedir data e hora do exame
-        System.out.print("\nData e duracao (dd/mm/aaaa hh:mm): ");
         String strData = new String();
         Date data;
         do{
+            System.out.print("\nData e duracao (dd/mm/aaaa hh:mm): ");
             check=0;
             strData = sc.nextLine();
             if((data=leData(strData)) == null){
                 check = 1;
-                System.out.println("Erro ao ler a data. Tente de novo.");
+                System.out.println("Erro ao ler a data.");
             }
         }while(check!=0);  
 
@@ -305,23 +313,61 @@ public class GestorDEIxames {
             if(!verificaSala(sala, data, duracao))
                 System.out.println("    - "+sala);
         }
+        String sala;
+         do{
+            System.out.print("\nEscolha a sala: ");
+            check=1;
+            sala = sc.next();
+            for(String s: salas){
+                 if(Objects.equals(s, sala)){
+                    check = 0;
+                }
+            } 
+            if(check == 1)
+                System.out.println("Sala invalida. Tente de novo.");
+        }while(check!=0);  
         
         Docente dResp = d.getDocResp();
         
         switch(op){
             case 1:
                 //exame normal
-                novo = new ExNormal(d,data,duracao,"sala",dResp);
+                novo = new ExNormal(d,data,duracao,sala,dResp);
+                
                 break;
-//            case 2:
-//                //epoca recurso
-//                break;
-//            case 3:
-//                //epoca especial
-//                break;
-      
+            case 2:
+                //epoca recurso
+                novo = new ExRecurso(d,data,duracao,sala,dResp);
+                break;
+            case 3:
+                //epoca especial
+                novo = new ExEspecial(d,data,duracao,sala,dResp);
+                break;     
         }
-        listExames.add(novo);
+        //associar vigilantes e funcionarios
+        System.out.println("\nASSOCIAR VIGILANTES\n");
+        
+        
+        
+        //confirmar
+        System.out.println("\nTem a certeza que pretende criar o seguinte novo exame: (< S - sim > < N - nao >)  "); 
+        System.out.println("\n\t"+novo+"\n");
+        String sConf;
+        do{
+            System.out.print("Opção: ");
+            check=0;
+            sConf = sc.next();
+            if ((!Objects.equals(sConf, "S")) && (!Objects.equals(sConf, "N"))){
+                check = 1;
+                System.out.println("Opcao invalida. Tente de novo.");
+            }
+        }while(check!=0);
+        if(Objects.equals(sConf, "S")){
+            listExames.add(novo);
+            System.out.println("\tExame criado com sucesso.");
+        }
+        else
+            System.out.println("\tCrição de exame cancelado.");
     }
     public Date leData(String d){
         //converte uma string com a data num determinado formato num objeto date
@@ -329,7 +375,7 @@ public class GestorDEIxames {
             Date data = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(d);
             return data;
         } catch (ParseException ex) {
-            Logger.getLogger(GestorDEIxames.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(GestorDEIxames.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }
@@ -357,14 +403,16 @@ public class GestorDEIxames {
         }
         return false;
     }
-      public boolean overlapTime(Date ini1, Date fim1, Date ini2, Date fim2){
-          //comparar se 2 intervalos de tempo se intercetam
-          //date1.compareTo(date2) < 0 date1 antes date2, senão depois
-          if((ini1.compareTo(fim2) < 0) && (fim1.compareTo(ini2) > 0)){
-              return true;
-          }else
-              return false;
-      } 
+    
+    public boolean overlapTime(Date ini1, Date fim1, Date ini2, Date fim2){
+        //comparar se 2 intervalos de tempo se intercetam
+        //date1.compareTo(date2) < 0 date1 antes date2, senão depois
+        if((ini1.compareTo(fim2) < 0) && (fim1.compareTo(ini2) > 0)){
+            return true;
+        }else
+            return false;
+    } 
+      
     
     public void saveCursos(String nome_fich) throws IOException{
         try {
@@ -373,13 +421,24 @@ public class GestorDEIxames {
                 oos.writeObject(listCursos);
             }
         }catch (FileNotFoundException ex) {
-            System.out.println("Ficheiro não encontrado");
+            System.out.println("Ficheiro não encontrado (cursos.dat)");
         }catch (IOException ex) {
-            System.out.println("Erro ao escrever no ficheiro");
+            System.out.println("Erro ao escrever no ficheiro (cursos.dat)");
         }
     }
     
-    
+    public void saveExames(String nome_fich) throws IOException{
+        try {
+            FileOutputStream os = new FileOutputStream("ficheiros\\exames.dat");
+            try (ObjectOutputStream oos = new ObjectOutputStream(os)) {
+                oos.writeObject(listExames);
+            }
+        }catch (FileNotFoundException ex) {
+            System.out.println("Ficheiro não encontrado (exames.dat)");
+        }catch (IOException ex) {
+            System.out.println("Erro ao escrever no ficheiro (exames.dat(");
+        }       
+    }
 
     public void savePessoas(String nome_fich) throws IOException{
         //guardar num ficheiro de texto linha a linha cada elemento do array de pessoas FUNÇÃO: STRINGJOINER
@@ -437,6 +496,7 @@ public class GestorDEIxames {
             e.printStackTrace();
         } 
     }
+
 //    //criar apenas algumas disciplinas para atribuir aos cursos e guardar num ficheiro
 //    public void curso(){
 //    Docente d1 = (Docente) listPessoas.get(15);
@@ -498,5 +558,18 @@ public class GestorDEIxames {
 //        System.out.println("Erro ao escrever no ficheiro");
 //    }
 //}
-
+//
+//        //so para inicializar o ficheiro dos exames
+//    public void exame(){
+//        listExames = new ArrayList<Exame>();
+//        try {
+//        FileOutputStream os = new FileOutputStream("ficheiros\\exames.dat");
+//            try (ObjectOutputStream oos = new ObjectOutputStream(os)) {
+//                oos.writeObject(listExames);}
+//        }catch (FileNotFoundException ex) {
+//            System.out.println("Ficheiro não encontrado");
+//        }catch (IOException ex) {
+//            System.out.println("Erro ao escrever no ficheiro");
+//        }
+//    }
 }

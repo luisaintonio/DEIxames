@@ -21,6 +21,10 @@ public class ExRecurso extends Exame{
     public void adicionaAluno(Aluno novo) {
         
     }
+     @Override
+    public String toString(){
+        return "Exame Época Recurso de "+discp.getNome()+". A realizar a "+data.getDate()+"/"+data.getMonth()+"/"+data.getYear()+" às "+data.getHours()+":"+data.getMinutes()+" na sala "+Sala;
+    }
     
 }
     
